@@ -3,7 +3,7 @@ from .models import AccessLog
 
 
 
-
+# Serializer for AccessLog model
 class AccessLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccessLog

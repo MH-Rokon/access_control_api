@@ -3,7 +3,7 @@ from django.db import models
 
 
 
-
+# Model for logging access conrol 
 class AccessLog(models.Model):
     card_id = models.CharField(max_length=50)          
     door_name = models.CharField(max_length=100)       

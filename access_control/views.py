@@ -2,10 +2,13 @@ from rest_framework import viewsets
 from .models import AccessLog
 from .serializers import AccessLogSerializer
 
-class AccessLogViewSet(viewsets.ModelViewSet):
-    
-    serializer_class = AccessLogSerializer
 
+
+
+
+# ViewSet for AccessLog: handles CRUD and filtering by card_id
+class AccessLogViewSet(viewsets.ModelViewSet):
+    serializer_class = AccessLogSerializer
     def get_queryset(self):
         logs = AccessLog.objects.all().order_by('-timestamp')
         

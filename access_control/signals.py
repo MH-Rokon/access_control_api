@@ -6,6 +6,9 @@ from .models import AccessLog
 
 LOGFILE = 'system_events.log'
 
+
+
+# Helper function to append a line to the log file with timestamp
 def append_event_line(line: str):
     ts = timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')
     full = f"[{ts}] - {line}"
@@ -16,6 +19,9 @@ def append_event_line(line: str):
     except Exception:
         pass
 
+
+
+# Signal handler for post_save -logs creation of AccessLog entries
 @receiver(post_save, sender=AccessLog)
 def handle_create(sender, instance, created, **kwargs):
     if created:
@@ -23,7 +29,10 @@ def handle_create(sender, instance, created, **kwargs):
         line = f"CREATE: Access log created for card {instance.card_id}. Status: {status}."
         append_event_line(line)
 
+
+# Signal handler for post_delete: logs deletion of AccessLog entries
 @receiver(post_delete, sender=AccessLog)
 def handle_delete(sender, instance, **kwargs):
     line = f"DELETE: Access log (ID: {instance.pk}) for card {instance.card_id} was deleted."
     append_event_line(line)
+
