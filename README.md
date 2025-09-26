@@ -1,97 +1,84 @@
 Access Control API
 
-Access Control API is a Django-based RESTful service for logging and managing door access events. Each access attempt is tracked with card ID, door name, status (granted/denied), and timestamp. The project is fully Dockerized for quick deployment and easy scalability.
+A Django-based RESTful API for logging and managing door access events. Each access attempt is recorded with a card ID, door name, access status (granted/denied), and timestamp. The project is fully Dockerized for quick deployment and scalability.
 
-Key Features
+Features
 
-Record and manage access logs for multiple doors.
+Record and manage access logs for multiple doors
 
-Track access status (granted or denied) for each card.
+Track access status (granted/denied) per card
 
-Filter access logs by card ID.
+Full CRUD API endpoints
 
-Full CRUD API endpoints for access logs.
+Filter access logs by card_id
 
-Automatic logging of create and delete actions to system_events.log.
+Automatic event logging to system_events.log on create and delete
 
-Easy deployment using Docker and Docker Compose.
+Ready-to-use with Docker & Docker Compose
 
-Technology Stack
+🛠️ Tech Stack
 
 Backend: Python 3.12, Django 4.x, Django REST Framework (DRF)
 
-Database: SQLite (default; can switch to PostgreSQL)
+Database: SQLite (default, easily switchable to PostgreSQL)
 
 Containerization: Docker, Docker Compose
+
 
 Project Structure
 access_control_api/
 ├── access_control_api/        # Django project settings
-├── logs/                      # Django app
+├── access_control/            # Main app
 │   ├── models.py              # AccessLog model
 │   ├── serializers.py         # DRF serializers
-│   ├── views.py               # API viewsets
-│   ├── signals.py             # Logging signals
+│   ├── views.py               # API views
+│   ├── signals.py             # Create/Delete signals
 │   └── tests.py               # Unit tests
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
 
-Installation
-1. Local Setup
-
-Clone the repository:
-
-git clone <repo_url>
+⚙️ Installation
+🔹 Local Setup
+# Clone repo
+git clone https://github.com/MH-Rokon/access_control_api.git
 cd access_control_api
 
-
-Create and activate a virtual environment:
-
+# Create & activate virtual environment
 python -m venv env
 source env/bin/activate
 
-
-Install dependencies:
-
+# Install dependencies
 pip install -r requirements.txt
 
-
-Apply database migrations:
-
+# Apply migrations
 python manage.py migrate
 
-
-Run the development server:
-
+# Run server
 python manage.py runserver
 
 
-The API will be accessible at: http://127.0.0.1:8000/
+ API available at: http://127.0.0.1:8000
 
-2. Docker Setup
+🔹 Docker Setup
+# Build and start containers
+docker compose build
+docker compose up -d
 
-Build the Docker image and start containers:
-
-sudo docker compose build
-sudo docker compose up -d
-
-
-Check running containers:
-
-sudo docker ps
+# Check running containers
+docker ps
 
 
-The API will be accessible at: http://localhost:8000/
+ API available at: http://localhost:8000
 
-API Endpoints
+ API Endpoints
 Method	Endpoint	Description	Query Params
-GET	/api/logs/	List all access logs	card_id optional
-GET	/api/logs/<id>/	Get log details by ID	-
-POST	/api/logs/	Create a new access log	-
-PUT	/api/logs/<id>/	Update an existing log	-
-DELETE	/api/logs/<id>/	Delete a log	-
+GET	/api/logs/	List all access logs	card_id (optional)
+GET	/api/logs/<id>/	Retrieve log by ID	-
+POST	/api/logs/	Create new access log	-
+PUT	/api/logs/<id>/	Update existing log	-
+DELETE	/api/logs/<id>/	Delete log by ID	-
 
 Filtering Example:
 
@@ -99,33 +86,33 @@ GET /api/logs/?card_id=C1001
 
 Logging
 
-All create and delete actions are automatically appended to system_events.log with timestamps:
+All create and delete actions are automatically written to system_events.log:
 
-[YYYY-MM-DD HH:MM:SS] - CREATE: Access log created for card C1001. Status: GRANTED.
-[YYYY-MM-DD HH:MM:SS] - DELETE: Access log (ID: 4) for card C1002 was deleted.
+[2025-09-23 10:35:15] - CREATE: Access log created for card C1001. Status: GRANTED.
+[2025-09-23 10:38:00] - DELETE: Access log (ID: 4) for card C1002 was deleted.
 
 
-Ensure the log file has write permissions inside the Docker container.
+Ensure system_events.log has write permissions inside Docker container.
 
 Testing
 
-Run unit tests with:
+Run the test suite:
 
 python manage.py test
 
 
-Tests cover:
+Covers:
 
 Create, update, delete operations
 
-Filtering logs by card ID
+Filtering by card_id
 
-Validation for read-only timestamp field
+Read-only validation for timestamp
 
-Notes
+🔄 Development Workflow
 
-Make sure your Docker container has access to the system_events.log file.
+Use the dev branch for ongoing work
 
-The timestamp field is read-only and cannot be updated via the API.
+Merge into main only when stable
 
-Use the development branch for ongoing work and merge into main when stable.
+Ensure commits are small and descriptive
